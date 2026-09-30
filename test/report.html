@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GMinsta Automated UI Test Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #0f172a;
+      line-height: 1.4;
+      margin: 0;
+      padding: 0;
+      background-color: #f1f5f9;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    .page {
+      position: relative;
+      width: 210mm;
+      height: 297mm;
+      margin: 20px auto;
+      padding: 10mm 15mm 10mm 15mm;
+      background: #ffffff;
+      border: 1px solid #111c24;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media print {
+      body {
+        background-color: #ffffff;
+      }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        border: 1px solid #111c24 !important;
+      }
+    }
+
+    .page-content {
+      flex: 1;
+    }
+
+    /* Header styled block */
+    .doc-header {
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .doc-header h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 26px;
+      color: #111c24;
+      margin: 0;
+      font-weight: 700;
+    }
+    .doc-header p {
+      color: #64748b;
+      margin: 4px 0 0 0;
+      font-size: 13px;
+    }
+    .doc-header .date-badge {
+      text-align: right;
+      font-weight: 600;
+      color: #334155;
+      font-size: 12px;
+    }
+
+    /* Section Header Bar */
+    .section-header {
+      background-color: #111c24;
+      padding: 6px 12px;
+      margin: 10px 0 8px 0;
+      display: flex;
+      align-items: center;
+    }
+    .section-header .num {
+      color: #dfb76c;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: bold;
+      margin-right: 12px;
+    }
+    .section-header .title {
+      color: #ffffff;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Test case styled table card */
+    .tc-card {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+      font-size: 10.5px;
+      border: 1px solid #111c24;
+    }
+    .tc-card thead th {
+      background-color: #16222f;
+      padding: 4px 8px;
+      border-bottom: 1px solid #111c24;
+      text-align: left;
+    }
+    .tc-card thead th.tc-title-cell {
+      border-right: 1px solid #475569;
+    }
+    .tc-card thead th .label {
+      color: #dfb76c;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 9px;
+      margin-right: 4px;
+    }
+    .tc-card thead th .val {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 11px;
+    }
+    .tc-card tbody td {
+      border: 1px solid #cbd5e1;
+      padding: 3px 6px;
+    }
+    .tc-card tbody td.tc-meta-label {
+      background-color: #f1f5f9;
+      font-weight: 600;
+      color: #0f172a;
+      width: 18%;
+      vertical-align: middle;
+    }
+    .tc-card tbody td.tc-meta-value {
+      color: #334155;
+      background-color: #ffffff;
+    }
+    .tc-card tbody td.tc-steps-cell {
+      padding: 0;
+      border: none;
+    }
+    .tc-steps-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+    }
+    .tc-steps-table th {
+      background-color: #1e293b;
+      color: #ffffff;
+      padding: 3px 6px;
+      font-weight: 600;
+      border: 1px solid #111c24;
+    }
+    .tc-steps-table td {
+      padding: 3px 6px;
+      border: 1px solid #cbd5e1;
+    }
+    .tc-steps-table td.test-data {
+      font-style: italic;
+      font-family: monospace;
+      font-size: 10px;
+      word-break: break-all;
+    }
+    .tc-actual-row td.tc-meta-value {
+      background-color: #ffffff;
+    }
+    .pass-text {
+      color: #15803d !important;
+      font-weight: bold;
+    }
+    .fail-text {
+      color: #b91c1c !important;
+      font-weight: bold;
+    }
+
+    /* Section 06 Tables styles */
+    table.report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 11px;
+    }
+    table.report-table th {
+      background: #111c24;
+      color: #ffffff;
+      font-weight: 600;
+      text-align: left;
+      padding: 7px 10px;
+      border: 1px solid #111c24;
+    }
+    table.report-table td {
+      padding: 7px 10px;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+    }
+    table.report-table tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+    .badge-pass {
+      color: #137333;
+      font-weight: bold;
+    }
+
+    /* Statistics table styles */
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 11px;
+    }
+    .stats-table th {
+      background-color: #111c24;
+      color: #dfb76c;
+      font-weight: 600;
+      padding: 6px;
+      border: 1px solid #111c24;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+    .stats-table td {
+      padding: 10px;
+      font-size: 13px;
+      font-weight: bold;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+    }
+    .stats-table td.pass-cell {
+      background-color: #f0fdf4;
+      color: #15803d;
+    }
+    .stats-table td.fail-cell {
+      background-color: #fef2f2;
+      color: #b91c1c;
+    }
+    .stats-table td.rate-cell {
+      background-color: #f0fdf4;
+      color: #15803d;
+    }
+
+    /* Screenshots layout */
+    .screenshot-grid-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #000000;
+    }
+    .screenshot-grid-table td {
+      border: 1px solid #000000;
+      padding: 10px;
+      text-align: center;
+      vertical-align: middle;
+      width: 50%;
+    }
+    .screenshot-img-container {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .screenshot-img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #cbd5e1;
+      display: block;
+      margin: 0 auto;
+    }
+    .figure-caption {
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      margin-top: 4px;
+    }
+
+    /* Conclusion lists */
+    .conclusion-section {
+      font-size: 11.5px;
+      color: #334155;
+      margin-bottom: 15px;
+    }
+    .conclusion-section p {
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+    .conclusion-section h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111c24;
+      margin-top: 15px;
+      margin-bottom: 8px;
+    }
+    .conclusion-list {
+      padding-left: 18px;
+      margin-bottom: 15px;
+    }
+    .conclusion-list li {
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    /* Footer layout */
+    .doc-footer {
+      background-color: #111c24;
+      color: #ffffff;
+      padding: 8px 12px;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-align: center;
+      width: 100%;
+      margin-top: auto;
+    }
+    .doc-footer span {
+      color: #dfb76c;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE 1: TEST CASES (TC-01 & TC-02) -->
+  <div class="page">
+    <div class="page-content">
+      <div class="doc-header">
+        <div>
+          <h1>GMinsta Web Application</h1>
+          <p>Automated Selenium Test Report</p>
+        </div>
+        <div class="date-badge">
+          Execution Date: 2026-06-12
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span class="num">04</span>
+        <span class="title">Test Cases</span>
+      </div>
+
+      <!-- TC-01 -->
+      <table class="tc-card">
+        <thead>
+          <tr>
+            <th class="tc-title-cell" style="width: 25%;">
+              <span class="label">Test Case ID</span> <span class="val">TC-01</span>
+            </th>
+            <th class="tc-title-cell" style="width: 40%;">
+              <span class="label">Test Case Name</span> <span class="val">Valid Login</span>
+            </th>
+            <th style="width: 35%;">
+              <span class="label">Category</span> <span class="val">Authentication — Login</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tc-meta-label">Objective</td>
+            <td colspan="2" class="tc-meta-value">Verify that a registered user can log in with correct credentials and is redirected to the Feed page with session token stored.</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Pre-conditions</td>
+            <td colspan="2" class="tc-meta-value">GMinsta app running at localhost:3000. User account exists in DB. Browser is on login page (/). No existing auth token in localStorage.</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Expected Result</td>
+            <td colspan="2" class="tc-meta-value">User is redirected to /home page; token stored in localStorage.</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="tc-steps-cell">
+              <table class="tc-steps-table">
+                <thead>
+                  <tr>
+                    <th style="width: 8%;">Step No.</th>
+                    <th style="width: 37%;">Action / Input</th>
+                    <th style="width: 25%;">Test Data</th>
+                    <th style="width: 30%;">Expected Outcome</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Open browser and navigate to base URL</td>
+                    <td class="test-data">http://localhost:3000/</td>
+                    <td>Login page loads; login form and input fields visible</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Enter registered email in Email field</td>
+                    <td class="test-data">selenium_17182104@example.com</td>
+                    <td>Email field accepts input; no error shown</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Enter correct password in Password field</td>
+                    <td class="test-data">Password123! (masked)</td>
+                    <td>Password field accepts input; characters are masked</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Submit the login form</td>
+                    <td class="test-data">Submit #loginForm</td>
+                    <td>Form submitted; authentication request POSTed to API</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Wait for API response</td>
+                    <td class="test-data">API POST /api/auth/login</td>
+                    <td>API returns 200 OK with token and user details</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>Verify redirect to Home feed page</td>
+                    <td class="test-data">Wait for URL to contain /home</td>
+                    <td>Browser navigates to /home; main feed page content loads</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>Verify localStorage stores token</td>
+                    <td class="test-data">localStorage.getItem("token")</td>
+                    <td>Token value is a non-null JWT string</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr class="tc-actual-row">
+            <td class="tc-meta-label">Actual Result / Status</td>
+            <td colspan="2" class="tc-meta-value pass-text">Redirected to /home feed page. Key 'token' verified in localStorage. &nbsp;|&nbsp; STATUS: PASS</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- TC-02 -->
+      <table class="tc-card">
+        <thead>
+          <tr>
+            <th class="tc-title-cell" style="width: 25%;">
+              <span class="label">Test Case ID</span> <span class="val">TC-02</span>
+            </th>
+            <th class="tc-title-cell" style="width: 40%;">
+              <span class="label">Test Case Name</span> <span class="val">Invalid Login</span>
+            </th>
+            <th style="width: 35%;">
+              <span class="label">Category</span> <span class="val">Authentication — Login</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tc-meta-label">Objective</td>
+            <td colspan="2" class="tc-meta-value">Verify that login fails gracefully with wrong credentials and an appropriate error message is displayed to the user.</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Pre-conditions</td>
+            <td colspan="2" class="tc-meta-value">GMinsta app running. Browser is on login page (/). No auth token present.</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Expected Result</td>
+            <td colspan="2" class="tc-meta-value">Error feedback shown; user remains on login page; no token stored.</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="tc-steps-cell">
+              <table class="tc-steps-table">
+                <thead>
+                  <tr>
+                    <th style="width: 8%;">Step No.</th>
+                    <th style="width: 37%;">Action / Input</th>
+                    <th style="width: 25%;">Test Data</th>
+                    <th style="width: 30%;">Expected Outcome</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Navigate to Login page</td>
+                    <td class="test-data">http://localhost:3000/</td>
+                    <td>Login page loads correctly</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Enter registered email address</td>
+                    <td class="test-data">selenium_17182104@example.com</td>
+                    <td>Email field accepts input</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Enter an incorrect password</td>
+                    <td class="test-data">WrongPassword123!</td>
+                    <td>Password field accepts input</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Submit the login form</td>
+                    <td class="test-data">Submit #loginForm</td>
+                    <td>Form submitted; request sent to API</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Wait for API error response</td>
+                    <td class="test-data">API POST /api/auth/login &rarr; 401 Unauthorized</td>
+                    <td>Error response received from server</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>Verify error feedback displayed</td>
+                    <td class="test-data">Check text of #message</td>
+                    <td>Validation error message appears inside `#message` label</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>Verify user remains on login page</td>
+                    <td class="test-data">Check current URL</td>
+                    <td>URL still matches http://localhost:3000/; not redirected</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr class="tc-actual-row">
+            <td class="tc-meta-label">Actual Result / Status</td>
+            <td colspan="2" class="tc-meta-value pass-text">Error feedback displayed in '#message'. URL remained at base path. &nbsp;|&nbsp; STATUS: PASS</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="doc-footer">
+      GMinsta Selenium Test Report &nbsp;|&nbsp; Date: <span>12 June 2026</span> &nbsp;|&nbsp; Result: <span>5/5 PASSED</span> &nbsp;|&nbsp; Pass Rate: <span>100%</span>
+    </div>
+  </div>
+
+
+  <!-- PAGE 2: TEST CASES (TC-03 & TC-04) -->
+  <div class="page">
+    <div class="page-content">
+      <div class="doc-header">
+        <div>
+          <h1>GMinsta Web Application</h1>
+          <p>Automated Selenium Test Report</p>
+        </div>
+        <div class="date-badge">
+          Execution Date: 2026-06-12
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span class="num">04</span>
+        <span class="title">Test Cases (Continued)</span>
+      </div>
+
+      <!-- TC-03 -->
+      <table class="tc-card">
+        <thead>
+          <tr>
+            <th class="tc-title-cell" style="width: 25%;">
+              <span class="label">Test Case ID</span> <span class="val">TC-03</span>
+            </th>
+            <th class="tc-title-cell" style="width: 40%;">
+              <span class="label">Test Case Name</span> <span class="val">New User Registration</span>
+            </th>
+            <th style="width: 35%;">
+              <span class="label">Category</span> <span class="val">Authentication — Register</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tc-meta-label">Objective</td>
+            <td colspan="2" class="tc-meta-value">Verify that a guest visitor can register a new account with valid details and is shown a success message.</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Pre-conditions</td>
+            <td colspan="2" class="tc-meta-value">GMinsta app running at localhost:3000. Browser is on register page (/register). No active session.</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Expected Result</td>
+            <td colspan="2" class="tc-meta-value">Registration success message displayed in #message; user can proceed to login page.</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="tc-steps-cell">
+              <table class="tc-steps-table">
+                <thead>
+                  <tr>
+                    <th style="width: 8%;">Step No.</th>
+                    <th style="width: 37%;">Action / Input</th>
+                    <th style="width: 25%;">Test Data</th>
+                    <th style="width: 30%;">Expected Outcome</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Navigate to Registration page</td>
+                    <td class="test-data">http://localhost:3000/register</td>
+                    <td>Register page loads with register form inputs visible</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Enter unique username</td>
+                    <td class="test-data">selenium_user_17182104</td>
+                    <td>Username field accepts input</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Enter valid, unique email address</td>
+                    <td class="test-data">selenium_17182104@example.com</td>
+                    <td>Email matches format validation and is accepted</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Enter secure password</td>
+                    <td class="test-data">Password123! (masked)</td>
+                    <td>Password characters are masked and length satisfies validation</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Confirm password</td>
+                    <td class="test-data">Password123! (masked)</td>
+                    <td>Characters match password input block</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>Submit the registration form</td>
+                    <td class="test-data">Submit #registerForm</td>
+                    <td>API registers new user and returns success status 201 Created</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>Verify registration success UI text</td>
+                    <td class="test-data">Check text of #message</td>
+                    <td>Success message text containing "Registration successful" is visible</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr class="tc-actual-row">
+            <td class="tc-meta-label">Actual Result / Status</td>
+            <td colspan="2" class="tc-meta-value pass-text">User registered successfully. "Registration successful" verified. &nbsp;|&nbsp; STATUS: PASS</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- TC-04 -->
+      <table class="tc-card">
+        <thead>
+          <tr>
+            <th class="tc-title-cell" style="width: 25%;">
+              <span class="label">Test Case ID</span> <span class="val">TC-04</span>
+            </th>
+            <th class="tc-title-cell" style="width: 40%;">
+              <span class="label">Test Case Name</span> <span class="val">Uploading a Post</span>
+            </th>
+            <th style="width: 35%;">
+              <span class="label">Category</span> <span class="val">Post Management</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tc-meta-label">Objective</td>
+            <td colspan="2" class="tc-meta-value">Verify that a logged-in user can create a new post with text and an image URL, and it renders immediately in the feed.</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Pre-conditions</td>
+            <td colspan="2" class="tc-meta-value">User is authenticated, redirected, and active on the Feed page (/home).</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Expected Result</td>
+            <td colspan="2" class="tc-meta-value">Post panel toggles open, form submits, and new post appears at top of feed.</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="tc-steps-cell">
+              <table class="tc-steps-table">
+                <thead>
+                  <tr>
+                    <th style="width: 8%;">Step No.</th>
+                    <th style="width: 37%;">Action / Input</th>
+                    <th style="width: 25%;">Test Data</th>
+                    <th style="width: 30%;">Expected Outcome</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Click the "Create Post" toggle button</td>
+                    <td class="test-data">Click #toggleCreate</td>
+                    <td>Post creation slide panel collapses open (#createPanel visible)</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Enter caption details in content area</td>
+                    <td class="test-data">"Welcome to GMinsta! Active testing..."</td>
+                    <td>Content field (#content) accepts string caption input</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Enter absolute image URL</td>
+                    <td class="test-data">https://via.placeholder.com/400</td>
+                    <td>Image URL input field (#imageUrl) accepts link value</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Submit the post creation form</td>
+                    <td class="test-data">Submit #postForm</td>
+                    <td>API executes POST /api/posts, returns 201 Created</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Locate post node inside main feed</td>
+                    <td class="test-data">Search DOM for post caption content</td>
+                    <td>New post is appended dynamically at the top of the feed</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>Verify post image renders</td>
+                    <td class="test-data">Check src attribute on post image tag</td>
+                    <td>Image renders correctly using the input URL value</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr class="tc-actual-row">
+            <td class="tc-meta-label">Actual Result / Status</td>
+            <td colspan="2" class="tc-meta-value pass-text">Post uploaded successfully and verified at the top of the feed. &nbsp;|&nbsp; STATUS: PASS</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="doc-footer">
+      GMinsta Selenium Test Report &nbsp;|&nbsp; Date: <span>12 June 2026</span> &nbsp;|&nbsp; Result: <span>5/5 PASSED</span> &nbsp;|&nbsp; Pass Rate: <span>100%</span>
+    </div>
+  </div>
+
+
+  <!-- PAGE 3: TEST CASE (TC-05) -->
+  <div class="page">
+    <div class="page-content">
+      <div class="doc-header">
+        <div>
+          <h1>GMinsta Web Application</h1>
+          <p>Automated Selenium Test Report</p>
+        </div>
+        <div class="date-badge">
+          Execution Date: 2026-06-12
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span class="num">04</span>
+        <span class="title">Test Cases (Continued)</span>
+      </div>
+
+      <!-- TC-05 -->
+      <table class="tc-card">
+        <thead>
+          <tr>
+            <th class="tc-title-cell" style="width: 25%;">
+              <span class="label">Test Case ID</span> <span class="val">TC-05</span>
+            </th>
+            <th class="tc-title-cell" style="width: 40%;">
+              <span class="label">Test Case Name</span> <span class="val">Editing Profile Details</span>
+            </th>
+            <th style="width: 35%;">
+              <span class="label">Category</span> <span class="val">Profile Mgmt</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tc-meta-label">Objective</td>
+            <td colspan="2" class="tc-meta-value">Verify that a logged-in user can modify their username, bio details, and profile picture, and changes reflect instantly.</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Pre-conditions</td>
+            <td colspan="2" class="tc-meta-value">User logged in, currently visiting profile page (/profile) with edit panel available.</td>
+          </tr>
+          <tr>
+            <td class="tc-meta-label">Expected Result</td>
+            <td colspan="2" class="tc-meta-value">Profile form updates user schema; profile headers render updated credentials.</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="tc-steps-cell">
+              <table class="tc-steps-table">
+                <thead>
+                  <tr>
+                    <th style="width: 8%;">Step No.</th>
+                    <th style="width: 37%;">Action / Input</th>
+                    <th style="width: 25%;">Test Data</th>
+                    <th style="width: 30%;">Expected Outcome</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Navigate to Profile view & click edit button</td>
+                    <td class="test-data">Click #toggleEditBtn</td>
+                    <td>Edit profile container (#editPanel) expands and becomes visible</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Clear and update Username field</td>
+                    <td class="test-data">selenium_updated_17182104</td>
+                    <td>Input updates username in text field</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Clear and update Bio description</td>
+                    <td class="test-data">"Updated bio 17182104"</td>
+                    <td>Bio textarea accepts updated bio text</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Enter new profile picture link</td>
+                    <td class="test-data">https://via.placeholder.com/128</td>
+                    <td>Profile picture text field accepts image URL input</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Submit the profile update form</td>
+                    <td class="test-data">Submit #profileForm</td>
+                    <td>Form submitted; PUT request sent to API; panel collapses</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>Verify username on header updates</td>
+                    <td class="test-data">Check text of #topUsername & #displayName</td>
+                    <td>Display headers show updated username value</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>Verify bio on page updates</td>
+                    <td class="test-data">Check text of #bioText</td>
+                    <td>Bio container displays updated bio description</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr class="tc-actual-row">
+            <td class="tc-meta-label">Actual Result / Status</td>
+            <td colspan="2" class="tc-meta-value pass-text">Profile data modified successfully. Display username and bio updated on page. &nbsp;|&nbsp; STATUS: PASS</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="doc-footer">
+      GMinsta Selenium Test Report &nbsp;|&nbsp; Date: <span>12 June 2026</span> &nbsp;|&nbsp; Result: <span>5/5 PASSED</span> &nbsp;|&nbsp; Pass Rate: <span>100%</span>
+    </div>
+  </div>
+
+
+  <!-- PAGE 4: EXECUTION SCREENSHOTS -->
+  <div class="page">
+    <div class="page-content">
+      <div class="doc-header">
+        <div>
+          <h1>GMinsta Web Application</h1>
+          <p>Automated Selenium Test Report</p>
+        </div>
+        <div class="date-badge">
+          Execution Date: 2026-06-12
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span class="num">05</span>
+        <span class="title">Execution Screenshots</span>
+      </div>
+      <p style="font-size: 11px; font-style: italic; color: #64748b; margin-bottom: 15px; margin-top: -5px;">
+        Screenshots below were captured live by Selenium WebDriver during the test execution run on 12 June 2026.
+      </p>
+
+      <table class="screenshot-grid-table">
+        <tr>
+          <td>
+            <div class="screenshot-img-container">
+              <img src="screenshots/1_login.png" class="screenshot-img" alt="Login Page">
+            </div>
+            <div class="figure-caption">Figure 1 — Login Page (TC-01 / TC-02)</div>
+          </td>
+          <td>
+            <div class="screenshot-img-container">
+              <img src="screenshots/2_register.png" class="screenshot-img" alt="Register Page">
+            </div>
+            <div class="figure-caption">Figure 2 — Register Page (TC-03)</div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="screenshot-img-container">
+              <img src="screenshots/3_home.png" class="screenshot-img" alt="Feed Page post-login">
+            </div>
+            <div class="figure-caption">Figure 3 — Feed Page post-login (TC-04)</div>
+          </td>
+          <td>
+            <div class="screenshot-img-container">
+              <img src="screenshots/4_profile.png" class="screenshot-img" alt="Profile Page">
+            </div>
+            <div class="figure-caption">Figure 4 — Profile Page (TC-05)</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="doc-footer">
+      GMinsta Selenium Test Report &nbsp;|&nbsp; Date: <span>12 June 2026</span> &nbsp;|&nbsp; Result: <span>5/5 PASSED</span> &nbsp;|&nbsp; Pass Rate: <span>100%</span>
+    </div>
+  </div>
+
+
+  <!-- PAGE 5: TEST RESULTS -->
+  <div class="page">
+    <div class="page-content">
+      <div class="doc-header">
+        <div>
+          <h1>GMinsta Web Application</h1>
+          <p>Automated Selenium Test Report</p>
+        </div>
+        <div class="date-badge">
+          Execution Date: 2026-06-12
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span class="num">06</span>
+        <span class="title">Test Results</span>
+      </div>
+
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th style="width: 12%;">TC ID</th>
+            <th style="width: 28%;">Test Case Name</th>
+            <th style="width: 25%;">Scenario</th>
+            <th style="width: 22%;">Category</th>
+            <th style="width: 13%;">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>TC-01</strong></td>
+            <td><strong>Valid Login</strong></td>
+            <td>TS-01 Login Page</td>
+            <td>Authentication</td>
+            <td><span class="badge-pass">PASS</span></td>
+          </tr>
+          <tr>
+            <td><strong>TC-02</strong></td>
+            <td><strong>Invalid Login</strong></td>
+            <td>TS-01 Login Page</td>
+            <td>Authentication</td>
+            <td><span class="badge-pass">PASS</span></td>
+          </tr>
+          <tr>
+            <td><strong>TC-03</strong></td>
+            <td><strong>New User Registration</strong></td>
+            <td>TS-02 Registration Page</td>
+            <td>Authentication</td>
+            <td><span class="badge-pass">PASS</span></td>
+          </tr>
+          <tr>
+            <td><strong>TC-04</strong></td>
+            <td><strong>Uploading a Post</strong></td>
+            <td>TS-03 Feed / Post Page</td>
+            <td>Post Management</td>
+            <td><span class="badge-pass">PASS</span></td>
+          </tr>
+          <tr>
+            <td><strong>TC-05</strong></td>
+            <td><strong>Editing Profile Details</strong></td>
+            <td>TS-04 Profile Page</td>
+            <td>Profile Mgmt</td>
+            <td><span class="badge-pass">PASS</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th style="width: 20%;">Total TCs</th>
+            <th style="width: 20%;">Passed</th>
+            <th style="width: 20%;">Failed</th>
+            <th style="width: 20%;">Pass Rate</th>
+            <th style="width: 20%;">Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>5</td>
+            <td class="pass-cell">5</td>
+            <td class="fail-cell">0</td>
+            <td class="rate-cell">100 %</td>
+            <td>~160 sec</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+
+    <div class="doc-footer">
+      GMinsta Selenium Test Report &nbsp;|&nbsp; Date: <span>12 June 2026</span> &nbsp;|&nbsp; Result: <span>5/5 PASSED</span> &nbsp;|&nbsp; Pass Rate: <span>100%</span>
+    </div>
+  </div>
+
+</body>
+</html>

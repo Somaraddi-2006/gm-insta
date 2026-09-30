@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GMinsta - Register</title>
+  <link rel="stylesheet" href="/public/css/style.css" />
+</head>
+<body class="login-page">
+  <div class="auth-wrap">
+    <div class="container auth-card">
+      <p class="auth-brand">GMinsta</p>
+      <h1>Create your account</h1>
+      <p class="auth-subtitle">Join the community and start sharing</p>
+      <form id="registerForm">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password (min 6 chars)" required />
+        <input type="password" id="confirmPassword" placeholder="Confirm password" required />
+        <button type="submit">Register</button>
+      </form>
+      <p id="message" class="auth-message"></p>
+      <p class="small auth-footer">Already have an account? <a href="/">Login</a></p>
+    </div>
+  </div>
+
+  <script src="/public/js/auth.js"></script>
+</body>
+</html>

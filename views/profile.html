@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>GMinsta — Profile</title>
+  <link rel="stylesheet" href="/public/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="profile-page">
+  <div class="prof-shell">
+    <header class="prof-top">
+      <a href="/home" class="prof-back" aria-label="Back">‹</a>
+      <span class="prof-top-title" id="topUsername">profile</span>
+      <div class="prof-top-right">
+        <button type="button" class="prof-icon-btn" onclick="logout()" title="Log out">⎋</button>
+      </div>
+    </header>
+
+    <section class="prof-head">
+      <div class="prof-avatar-wrap">
+        <div class="prof-avatar-ring">
+          <img id="profAvatarImg" src="" alt="" class="prof-avatar-img" width="86" height="86" />
+        </div>
+        <label class="prof-change-photo">
+          Change photo
+          <input type="file" id="avatarInput" accept="image/*" hidden />
+        </label>
+      </div>
+      <div class="prof-stats">
+        <div class="prof-stat">
+          <strong id="statPosts">0</strong>
+          <span>posts</span>
+        </div>
+        <div class="prof-stat">
+          <strong id="statFollowers">0</strong>
+          <span>followers</span>
+        </div>
+        <div class="prof-stat">
+          <strong id="statFollowing">0</strong>
+          <span>following</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="prof-bio-block">
+      <p class="prof-display-name" id="displayName"></p>
+      <p class="prof-bio-text" id="bioText"></p>
+      <p class="prof-email small" id="emailText"></p>
+    </div>
+
+    <div class="prof-actions">
+      <a href="/chat" class="prof-btn prof-btn--ghost">Message</a>
+      <button type="button" class="prof-btn prof-btn--ghost" id="toggleEditBtn">Edit profile</button>
+    </div>
+
+    <div class="prof-edit" id="editPanel" hidden>
+      <form id="profileForm">
+        <input id="username" placeholder="Username" />
+        <textarea id="bio" rows="2" placeholder="Bio"></textarea>
+        <input id="profilePicture" placeholder="Or paste profile picture URL" />
+        <button type="submit" class="prof-btn prof-btn--primary">Save</button>
+      </form>
+    </div>
+
+    <section class="prof-upload">
+      <h3 class="prof-upload-title">New content</h3>
+      <div class="prof-upload-tabs">
+        <button type="button" class="prof-upload-tab prof-upload-tab--active" data-upload-tab="post">Post</button>
+        <button type="button" class="prof-upload-tab" data-upload-tab="reel">Reel</button>
+      </div>
+      <form id="uploadPostForm" class="prof-upload-form">
+        <p class="prof-hint">Upload a photo (JPEG, PNG, GIF, WebP).</p>
+        <input type="file" id="postImageFile" accept="image/*" />
+        <textarea id="postCaption" placeholder="Caption (optional)"></textarea>
+        <button type="submit" class="prof-btn prof-btn--primary">Share post</button>
+      </form>
+      <form id="uploadReelForm" class="prof-upload-form" hidden>
+        <p class="prof-hint">Upload a video (MP4, WebM). Optional: add a cover image.</p>
+        <input type="file" id="reelVideoFile" accept="video/*" required />
+        <input type="file" id="reelThumbFile" accept="image/*" />
+        <textarea id="reelCaption" placeholder="Caption (optional)"></textarea>
+        <button type="submit" class="prof-btn prof-btn--primary">Share reel</button>
+      </form>
+    </section>
+
+    <nav class="prof-tabs" aria-label="Content">
+      <button type="button" class="prof-tab prof-tab--active" data-tab="posts" aria-selected="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </button>
+      <button type="button" class="prof-tab" data-tab="reels" aria-selected="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M10 8l5 4-5 4V8z"/></svg>
+      </button>
+    </nav>
+
+    <div id="gridPosts" class="prof-grid"></div>
+    <div id="gridReels" class="prof-grid" hidden></div>
+
+    <section class="prof-discover">
+      <h3>Discover people</h3>
+      <div id="users"></div>
+    </section>
+  </div>
+
+  <script src="/public/js/shared.js"></script>
+  <script src="/public/js/profile.js"></script>
+</body>
+</html>

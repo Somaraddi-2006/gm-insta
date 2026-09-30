@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GMinsta - Chat</title>
+  <link rel="stylesheet" href="/public/css/style.css" />
+</head>
+<body class="chat-page">
+  <div class="chat-app">
+    <header class="chat-topbar">
+      <div>
+        <p class="chat-eyebrow">GMinsta </p>
+        <h1>Chat</h1>
+      </div>
+      <button class="secondary chat-logout" type="button" onclick="logout()">Logout</button>
+    </header>
+
+    <nav class="chat-nav" aria-label="Primary">
+      <a href="/home" id="homeNav">Home</a>
+      <a href="/profile" id="profileNav">Profile</a>
+      <a href="/chat" aria-current="page" id="chatNav">Chat</a>
+    </nav>
+
+    <main class="chat-shell">
+      <aside class="chat-sidebar">
+        <label class="chat-label" for="receiverSelect">Choose a conversation</label>
+        <select id="receiverSelect" aria-label="Select user to chat with"></select>
+        <p class="chat-sidebar-note">Pick a user to open your messages.</p>
+      </aside>
+
+      <section class="chat-panel">
+        <div class="chat-thread-head">
+          <div class="chat-thread-avatar" aria-hidden="true" id="chatAvatar">C</div>
+          <div>
+            <p class="chat-thread-label">Now chatting with</p>
+            <h2 id="activeChatName">Select a user</h2>
+          </div>
+        </div>
+
+        <div id="conversation" class="conversation" aria-live="polite">
+          <div class="chat-empty">
+            <h3>No messages yet</h3>
+            <p>Select someone from the list and start the conversation.</p>
+          </div>
+        </div>
+
+        <form id="chatForm" class="chat-form">
+          <input
+            id="messageText"
+            type="text"
+            placeholder="Type a message..."
+            autocomplete="off"
+            maxlength="1000"
+            required
+          />
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="/public/js/shared.js"></script>
+  <script src="/public/js/chat.js"></script>
+</body>
+</html>

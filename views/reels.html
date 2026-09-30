@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GMinsta - Reels</title>
+  <link rel="stylesheet" href="/public/css/style.css" />
+</head>
+<body class="reels-page">
+  <div class="reels-app">
+    <header class="reels-topbar">
+      <div>
+        <p class="reels-kicker">Short videos</p>
+        <h1>Reels</h1>
+      </div>
+      <nav class="reels-nav">
+        <a href="/home" id="homeNav">Home</a>
+        <a href="/profile" id="profileNav">Profile</a>
+        <a href="/chat" id="chatNav">Chat</a>
+        <a href="/reels" aria-current="page" id="reelsNav">Reels</a>
+      </nav>
+    </header>
+
+    <section class="reels-upload-card">
+      <h2>Upload a reel</h2>
+      <form id="reelForm" class="reels-upload-form">
+        <input id="reelVideoUrl" type="url" placeholder="Direct video URL (.mp4)" required />
+        <input id="reelCaption" type="text" placeholder="Caption" maxlength="180" />
+        <div class="reels-upload-actions">
+          <button type="submit">Post Reel</button>
+          <button type="button" class="secondary" onclick="logout()">Logout</button>
+        </div>
+      </form>
+    </section>
+
+    <main id="reelsFeed" class="reels-feed" aria-live="polite"></main>
+  </div>
+
+  <script src="/public/js/shared.js"></script>
+  <script src="/public/js/reels.js"></script>
+</body>
+</html>
